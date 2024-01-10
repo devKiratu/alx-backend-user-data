@@ -5,6 +5,7 @@ defines function for obfuscating PII
 from typing import List
 import re
 import logging
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -42,3 +43,16 @@ class RedactingFormatter(logging.Formatter):
                                       record.getMessage(), self.SEPARATOR)
         record.msg = masked_message
         return super(RedactingFormatter, self).format(record)
+
+
+def get_logger() -> logging.Logger:
+    """
+    creates a custome logging object
+    """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
+    logger.addHandler(stream_handler)
+    return logger
