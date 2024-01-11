@@ -39,9 +39,9 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """format log message by masking PII data"""
         masked_message = filter_datum(self.fields, self.REDACTION,
                                       record.getMessage(), self.SEPARATOR)
-        """format log message by masking PII data"""
         record.msg = masked_message
         return super(RedactingFormatter, self).format(record)
 
