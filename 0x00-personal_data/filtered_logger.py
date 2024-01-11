@@ -66,10 +66,10 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """
     returns a connector to a mysql database
     """
-    db_username = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
-    db_password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
-    db_host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
+    db_username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    db_password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    db_host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
     conn = mysql.connector.connection.MySQLConnection(
         user=db_username,
         password=db_password,
@@ -88,17 +88,11 @@ def main() -> None:
     db = get_db()
     cursor = db.cursor()
     cursor.execute('SELECT * FROM users;')
+    keys = [col[0] for col in cursor.description]
     for row in cursor:
-        formatted_row = []
-        formatted_row.append("name={};".format(row[0]))
-        formatted_row.append("email={};".format(row[1]))
-        formatted_row.append("phone={};".format(row[2]))
-        formatted_row.append("ssn={};".format(row[3]))
-        formatted_row.append("password={};".format(row[4]))
-        formatted_row.append("ip={};".format(row[5]))
-        formatted_row.append("last_login={};".format(row[6]))
-        formatted_row.append("user_agent={};".format(row[7]))
-        logger.info(" ".join(formatted_row))
+        formatted_row = " ".join("{}={};".format(key, val)
+                                 for key, val in zip(keys, row))
+        logger.info(formatted_row)
     cursor.close()
     db.close()
 
