@@ -77,3 +77,31 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         database=database
     )
     return conn
+
+
+def main() -> None:
+    """
+    obtains a database connection using get_db and retrieve all rows in the
+    users table and display each row under a filtered format
+    """
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM users;')
+    for row in cursor:
+        formatted_row = []
+        formatted_row.append("name={};".format(row[0]))
+        formatted_row.append("email={};".format(row[1]))
+        formatted_row.append("phone={};".format(row[2]))
+        formatted_row.append("ssn={};".format(row[3]))
+        formatted_row.append("password={};".format(row[4]))
+        formatted_row.append("ip={};".format(row[5]))
+        formatted_row.append("last_login={};".format(row[6]))
+        formatted_row.append("user_agent={};".format(row[7]))
+        logger.info(" ".join(formatted_row))
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
