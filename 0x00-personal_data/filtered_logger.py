@@ -20,9 +20,8 @@ def filter_datum(fields: List[str], redaction: str,
             fields in the log line (message)
     """
     for field in fields:
-        match = re.search(r"{}=([^{}]+)".format(field, separator), message)
-        if match:
-            message = re.sub(match.group(1), redaction, message)
+        message = re.sub(f"{field}=.*?{separator}",
+                         f"{field}={redaction}{separator}", message)
     return message
 
 
