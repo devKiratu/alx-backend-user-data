@@ -66,15 +66,15 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """
     returns a connector to a mysql database
     """
-    user = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
-    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
-    database = os.getenv('PERSONAL_DATA_DB_NAME')
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    db_username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    db_password = os.getenv('PERSONAL_DATA_DB_PASSWORD', "")
+    db_host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
     conn = mysql.connector.connection.MySQLConnection(
-        user=user,
-        password=password,
-        host=host,
-        database=database
+        user=db_username,
+        password=db_password,
+        host=db_host,
+        database=db_name
     )
     return conn
 
