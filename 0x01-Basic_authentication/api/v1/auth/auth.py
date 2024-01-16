@@ -28,7 +28,6 @@ class Auth:
         """
         validate all requests to secure the API
         """
-        print(f"REQUEST IS {request}")
         if request is None:
             return None
         return request.headers.get('Authorization')
