@@ -22,12 +22,9 @@ class Auth:
             if '*' in test_path:
                 if re.match(test_path, path):
                     return False
-        if path in excluded_paths:
-            return False
-        else:
-            if path[-1] != '/':
-                path += '/'
-            return not (path in excluded_paths)
+        if path[-1] != '/':
+            path += '/'
+        return not (path in excluded_paths)
 
     def authorization_header(self, request=None) -> str:
         """
