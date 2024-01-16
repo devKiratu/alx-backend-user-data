@@ -12,9 +12,17 @@ class Auth:
     """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
-        to implement
+        determines if a path is in the list of public paths - those
+        requiring auth
         """
-        return False
+        if path is None or excluded_paths is None or len(excluded_paths) == 0:
+            return True
+        elif path in excluded_paths:
+            return False
+        else:
+            if path[-1] != '/':
+                path += '/'
+            return not (path in excluded_paths)
 
     def authorization_header(self, request=None) -> str:
         """
