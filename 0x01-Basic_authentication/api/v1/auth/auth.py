@@ -26,9 +26,12 @@ class Auth:
 
     def authorization_header(self, request=None) -> str:
         """
-        to implement
+        validate all requests to secure the API
         """
-        return None
+        print(f"REQUEST IS {request}")
+        if request is None:
+            return None
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
