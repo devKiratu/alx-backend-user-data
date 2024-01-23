@@ -5,6 +5,7 @@ This module contains auth functionality
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
+import uuid
 from db import DB
 from user import User
 
@@ -16,6 +17,13 @@ def _hash_password(password: str) -> bytes:
     pwd = password.encode('utf-8')
     hashed = bcrypt.hashpw(pwd, bcrypt.gensalt())
     return hashed
+
+
+def _generate_uuid() -> str:
+    """
+    return a string representation of a new UUID
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
