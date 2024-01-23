@@ -46,13 +46,12 @@ class DB:
         """
         searches for a user by attributes in key word arguments
         """
-        try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-            if not user:
-                raise NoResultFound()
-            return user
-        except InvalidRequestError as e:
-            raise(e)
+        if not kwargs:
+            raise InvalidRequestError
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if not user:
+            raise NoResultFound()
+        return user
 
     def update_user(self, user_id: int, **kwargs: str) -> None:
         """
