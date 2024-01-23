@@ -50,20 +50,17 @@ class DB:
             raise InvalidRequestError
         user = self._session.query(User).filter_by(**kwargs).first()
         if not user:
-            raise NoResultFound()
+            raise NoResultFound
         return user
 
     def update_user(self, user_id: int, **kwargs: str) -> None:
         """
         updates user data
         """
-        try:
-            user = self.find_user_by(id=user_id)
-            for k, v in kwargs.items():
-                if hasattr(User, k):
-                    setattr(user, k, v)
-                else:
-                    raise ValueError()
-            self._session.commit()
-        except NoResultFound as e:
-            raise(e)
+        user = self.find_user_by(id=user_id)
+        for k, v in kwargs.items():
+            if hasattr(user, k):
+                setattr(user, k, v)
+            else:
+                raise ValueError
+        self._session.commit()
